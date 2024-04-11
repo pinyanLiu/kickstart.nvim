@@ -538,7 +538,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -851,6 +851,7 @@ require('lazy').setup({
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
+    --
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
     icons = vim.g.have_nerd_font and {} or {
       cmd = '⌘',
@@ -870,5 +871,12 @@ require('lazy').setup({
   },
 })
 
+vim.keymap.set('i', '<Tab>', function()
+  if string.match(vim.api.nvim_get_current_line():sub(1, vim.fn.col '.' - 1), '^%s*$') then
+    return vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
+  else
+    return vim.api.nvim_replace_termcodes('<C-N>', true, false, true)
+  end
+end, { expr = true })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
